@@ -79,56 +79,73 @@ function HeroImageCarousel() {
     <div className="relative w-full h-full min-h-[400px] lg:min-h-[550px]">
       {/* Glow ring behind image */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[85%] h-[85%] rounded-full bg-[var(--color-gold)]/8 blur-[80px] animate-pulse" />
+        <div className="w-[85%] h-[85%] rounded-full bg-[var(--color-gold)]/12 blur-[90px] animate-pulse" />
       </div>
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[60%] h-[60%] rounded-full border-2 border-[var(--color-gold)]/15 animate-[spin_20s_linear_infinite]" />
+        <div className="w-[60%] h-[60%] rounded-full border-2 border-[var(--color-gold)]/20 animate-slow-rotate" />
       </div>
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-[75%] h-[75%] rounded-full border border-[var(--color-gold)]/8 animate-[spin_30s_linear_infinite_reverse]" />
+        <div className="w-[75%] h-[75%] rounded-full border border-[var(--color-gold)]/10 animate-[spin_40s_linear_infinite_reverse]" />
       </div>
 
       {HERO_PLAYERS.map((player, index) => (
-        <div
+        <motion.div
           key={player.alt}
           className={`absolute inset-0 flex items-center justify-center transition-all duration-700 ease-in-out ${
-            index === current
-              ? "opacity-100 scale-100"
-              : "opacity-0 scale-95"
+            index === current ? "opacity-100 scale-100" : "opacity-0 scale-95"
           }`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: index === current ? 1 : 0 }}
+          transition={{ duration: 0.7 }}
         >
-          <div className="relative w-[90%] h-[90%] rounded-3xl overflow-hidden border-2 border-[var(--color-gold)]/20 shadow-[0_0_60px_rgba(251,239,11,0.15)]">
+          <motion.div
+            className="relative w-[90%] h-[90%] rounded-3xl overflow-hidden border-2 border-[var(--color-gold)]/25 shadow-[0_0_80px_rgba(251,239,11,0.2)] group"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 100 }}
+          >
             <Image
               src={player.src}
               alt={player.alt}
               fill
-              className="object-cover object-top"
+              className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
               priority={index === 0}
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             {/* Gradient overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#000F4D] via-transparent to-transparent opacity-60" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#000F4D]/40 to-transparent" />
-            
+
             {/* Player name badge */}
-            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+            <motion.div
+              className="absolute bottom-4 left-4 right-4 flex items-center justify-between"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
               <span className="text-white font-black text-lg italic uppercase tracking-wider drop-shadow-lg">
                 {player.alt}
               </span>
               <div className="flex gap-0.5">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 text-[var(--color-gold)] fill-[var(--color-gold)]" />
+                  <motion.div
+                    key={i}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.4 + i * 0.1, type: "spring" }}
+                  >
+                    <Star className="w-4 h-4 text-[var(--color-gold)] fill-[var(--color-gold)]" />
+                  </motion.div>
                 ))}
               </div>
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       ))}
 
       {/* Carousel dots */}
       <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {HERO_PLAYERS.map((_, index) => (
-          <button
+          <motion.button
             key={index}
             onClick={() => setCurrent(index)}
             className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -136,6 +153,8 @@ function HeroImageCarousel() {
                 ? "bg-[var(--color-gold)] w-8"
                 : "bg-white/20 w-4 hover:bg-white/40"
             }`}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
           />
         ))}
       </div>
@@ -188,8 +207,8 @@ export default function Home() {
                 className="text-lg md:text-xl text-gray-400 max-w-2xl mb-12"
               >
                 Instantly acquire premium eFootball accounts loaded with Epic
-                cards, Showtime players, and unlimited potential. Skip the grind,
-                start winning.
+                cards, Showtime players, and unlimited potential. Skip the
+                grind, start winning.
               </motion.p>
 
               <motion.div
@@ -259,15 +278,28 @@ export default function Home() {
       {/* ═══════════ PLAYER SHOWCASE STRIP ═══════════ */}
       <section className="relative py-6 bg-[#000A33] border-y border-[var(--color-gold)]/10 overflow-hidden">
         <div className="flex animate-marquee items-center gap-8 whitespace-nowrap">
-          {[...HERO_PLAYERS, ...HERO_PLAYERS, ...HERO_PLAYERS].map((player, i) => (
-            <div key={`${player.alt}-${i}`} className="flex-shrink-0 flex items-center gap-3 px-4">
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[var(--color-gold)]/30 flex-shrink-0">
-                <Image src={player.src} alt={player.alt} width={48} height={48} className="object-cover w-full h-full" />
+          {[...HERO_PLAYERS, ...HERO_PLAYERS, ...HERO_PLAYERS].map(
+            (player, i) => (
+              <div
+                key={`${player.alt}-${i}`}
+                className="flex-shrink-0 flex items-center gap-3 px-4"
+              >
+                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[var(--color-gold)]/30 flex-shrink-0">
+                  <Image
+                    src={player.src}
+                    alt={player.alt}
+                    width={48}
+                    height={48}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <span className="text-white/60 font-bold text-sm uppercase tracking-widest italic">
+                  {player.alt}
+                </span>
+                <Star className="w-3.5 h-3.5 text-[var(--color-gold)] fill-[var(--color-gold)]" />
               </div>
-              <span className="text-white/60 font-bold text-sm uppercase tracking-widest italic">{player.alt}</span>
-              <Star className="w-3.5 h-3.5 text-[var(--color-gold)] fill-[var(--color-gold)]" />
-            </div>
-          ))}
+            ),
+          )}
         </div>
       </section>
 
@@ -289,70 +321,103 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Buy / Sell */}
-            <a
+            <motion.a
               href="https://wa.me/2347062826313?text=Hi%20KMoney%20Store,%20I%20want%20to%20inquire%20about%20buying/selling%20an%20eFootball%20account."
               target="_blank"
               rel="noreferrer"
-              className="group bg-[#001A88] p-8 rounded-3xl border border-[var(--color-gold)]/10 hover:border-[var(--color-gold)]/40 hover:bg-[#0022AA] transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(251,239,11,0.15)] flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0 }}
+              className="group bg-gradient-to-br from-[#001A88] to-[#0d0d44] p-8 rounded-3xl border border-[var(--color-gold)]/15 hover:border-[var(--color-gold)]/50 hover:bg-[#0022AA] transition-all hover:-translate-y-3 hover:shadow-[0_0_40px_rgba(251,239,11,0.25)] flex flex-col items-center text-center"
+              whileHover={{ scale: 1.05 }}
             >
-              <div className="w-16 h-16 bg-[var(--color-gold)]/10 rounded-2xl flex items-center justify-center mb-6 text-[var(--color-gold)] group-hover:scale-110 transition-transform">
+              <motion.div
+                className="w-16 h-16 bg-[var(--color-gold)]/15 rounded-2xl flex items-center justify-center mb-6 text-[var(--color-gold)] transition-transform"
+                whileHover={{ scale: 1.15, rotate: 10 }}
+              >
                 <Shield className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-black text-white uppercase italic mb-3">
+              </motion.div>
+              <h3 className="text-2xl font-black text-white uppercase italic mb-3 group-hover:text-[var(--color-gold)] transition-colors">
                 Buy / Sell Accounts
               </h3>
-              <p className="text-gray-400 text-sm mb-6 flex-grow">
+              <p className="text-gray-400 text-sm mb-6 flex-grow group-hover:text-gray-300 transition-colors">
                 Trade your old account or purchase a premium Division 1 ready
                 squad securely.
               </p>
-              <span className="w-full text-center px-6 py-3 bg-[var(--color-gold)]/10 text-[var(--color-gold)] font-bold rounded-xl text-sm group-hover:bg-[var(--color-gold)] group-hover:text-[#000F4D] transition-colors">
+              <motion.span
+                className="w-full text-center px-6 py-3 bg-[var(--color-gold)]/10 text-[var(--color-gold)] font-bold rounded-xl text-sm group-hover:bg-[var(--color-gold)] group-hover:text-[#000F4D] transition-colors"
+                whileHover={{ scale: 1.05 }}
+              >
                 Request Service
-              </span>
-            </a>
+              </motion.span>
+            </motion.a>
 
             {/* Coins Purchase */}
-            <a
+            <motion.a
               href="https://wa.me/2347062826313?text=Hi%20KMoney%20Store,%20I%20would%20like%20to%20purchase%20some%20eFootball%20coins."
               target="_blank"
               rel="noreferrer"
-              className="group bg-[#001A88] p-8 rounded-3xl border border-[var(--color-gold)]/10 hover:border-[#25D366]/40 hover:bg-[#0022AA] transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(37,211,102,0.15)] flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="group bg-gradient-to-br from-[#001A88] to-[#0d0d44] p-8 rounded-3xl border border-[#25D366]/15 hover:border-[#25D366]/50 hover:bg-[#0022AA] transition-all hover:-translate-y-3 hover:shadow-[0_0_40px_rgba(37,211,102,0.25)] flex flex-col items-center text-center"
+              whileHover={{ scale: 1.05 }}
             >
-              <div className="w-16 h-16 bg-[#25D366]/10 rounded-2xl flex items-center justify-center mb-6 text-[#25D366] group-hover:scale-110 transition-transform">
+              <motion.div
+                className="w-16 h-16 bg-[#25D366]/15 rounded-2xl flex items-center justify-center mb-6 text-[#25D366] transition-transform"
+                whileHover={{ scale: 1.15, rotate: 10 }}
+              >
                 <Zap className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-black text-white uppercase italic mb-3">
+              </motion.div>
+              <h3 className="text-2xl font-black text-white uppercase italic mb-3 group-hover:text-[#25D366] transition-colors">
                 Coins Purchase
               </h3>
-              <p className="text-gray-400 text-sm mb-6 flex-grow">
+              <p className="text-gray-400 text-sm mb-6 flex-grow group-hover:text-gray-300 transition-colors">
                 Get eFootball coins added to your account instantly at the best
                 market rates.
               </p>
-              <span className="w-full text-center px-6 py-3 bg-[#25D366]/10 text-[#25D366] font-bold rounded-xl text-sm group-hover:bg-[#25D366] group-hover:text-white transition-colors">
+              <motion.span
+                className="w-full text-center px-6 py-3 bg-[#25D366]/10 text-[#25D366] font-bold rounded-xl text-sm group-hover:bg-[#25D366] group-hover:text-white transition-colors"
+                whileHover={{ scale: 1.05 }}
+              >
                 Request Service
-              </span>
-            </a>
+              </motion.span>
+            </motion.a>
 
             {/* Custom Formation */}
-            <a
+            <motion.a
               href="https://wa.me/2347062826313?text=Hi%20KMoney%20Store,%20I%20am%20interested%20in%20a%20custom%20formation."
               target="_blank"
               rel="noreferrer"
-              className="group bg-[#001A88] p-8 rounded-3xl border border-[var(--color-gold)]/10 hover:border-white/40 hover:bg-[#0022AA] transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(255,255,255,0.15)] flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="group bg-gradient-to-br from-[#001A88] to-[#0d0d44] p-8 rounded-3xl border border-white/15 hover:border-white/50 hover:bg-[#0022AA] transition-all hover:-translate-y-3 hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] flex flex-col items-center text-center"
+              whileHover={{ scale: 1.05 }}
             >
-              <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-white group-hover:scale-110 transition-transform">
+              <motion.div
+                className="w-16 h-16 bg-white/15 rounded-2xl flex items-center justify-center mb-6 text-white transition-transform"
+                whileHover={{ scale: 1.15, rotate: 10 }}
+              >
                 <Gamepad2 className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-black text-white uppercase italic mb-3">
+              </motion.div>
+              <h3 className="text-2xl font-black text-white uppercase italic mb-3 group-hover:text-gradient-gold transition-colors">
                 Custom Formation
               </h3>
-              <p className="text-gray-400 text-sm mb-6 flex-grow">
+              <p className="text-gray-400 text-sm mb-6 flex-grow group-hover:text-gray-300 transition-colors">
                 Get expert guidance and META custom formations designed to
                 uniquely fit your playstyle.
               </p>
-              <span className="w-full text-center px-6 py-3 bg-white/10 text-white font-bold rounded-xl text-sm group-hover:bg-white group-hover:text-[#000F4D] transition-colors">
+              <motion.span
+                className="w-full text-center px-6 py-3 bg-white/10 text-white font-bold rounded-xl text-sm group-hover:bg-white group-hover:text-[#000F4D] transition-colors"
+                whileHover={{ scale: 1.05 }}
+              >
                 Request Service
-              </span>
-            </a>
+              </motion.span>
+            </motion.a>
           </div>
         </div>
       </section>
@@ -397,60 +462,86 @@ export default function Home() {
               LEGENDARY <span className="text-gradient-gold">PLAYERS</span>
             </h2>
             <p className="text-gray-400 max-w-xl mx-auto">
-              These are the kind of legends you get when you shop with KMoney Store.
+              These are the kind of legends you get when you shop with KMoney
+              Store.
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
             {[
               { src: "/players/messi.jpg", name: "Messi", rating: "99" },
-              { src: "/players/batistuta.jpg", name: "Batistuta", rating: "95" },
+              {
+                src: "/players/batistuta.jpg",
+                name: "Batistuta",
+                rating: "95",
+              },
               { src: "/players/son.jpg", name: "Son", rating: "94" },
               { src: "/players/forlan.jpg", name: "Forlan", rating: "93" },
             ].map((player, index) => (
               <motion.div
                 key={player.name}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative aspect-[3/4] rounded-2xl overflow-hidden border border-[var(--color-gold)]/10 hover:border-[var(--color-gold)]/40 transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(251,239,11,0.2)] cursor-pointer"
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                className="group relative aspect-[3/4] rounded-2xl overflow-hidden border border-[var(--color-gold)]/15 hover:border-[var(--color-gold)]/50 transition-all hover:-translate-y-3 hover:shadow-[0_0_40px_rgba(251,239,11,0.3)] cursor-pointer"
+                whileHover={{ scale: 1.03 }}
               >
                 <Image
                   src={player.src}
                   alt={player.name}
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="object-cover group-hover:scale-120 transition-transform duration-700 ease-out"
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
                 {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#000F4D] via-[#000F4D]/20 to-transparent" />
-                
+                <div className="absolute inset-0 bg-gradient-to-t from-[#000F4D] via-[#000F4D]/30 to-transparent group-hover:from-[#000F4D]/90 transition-all duration-500" />
+
                 {/* Rating badge */}
-                <div className="absolute top-3 right-3 bg-[var(--color-gold)] text-[#000F4D] font-black text-sm px-2.5 py-1 rounded-lg shadow-lg">
+                <motion.div
+                  className="absolute top-3 right-3 bg-[var(--color-gold)] text-[#000F4D] font-black text-sm px-3 py-1.5 rounded-lg shadow-lg"
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.15 + 0.3 }}
+                >
                   {player.rating}
-                </div>
+                </motion.div>
 
                 {/* Player info */}
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3 className="text-white font-black text-xl uppercase italic mb-1 drop-shadow-lg">
+                <motion.div
+                  className="absolute bottom-0 left-0 right-0 p-4"
+                  initial={{ y: 10, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.15 + 0.2 }}
+                >
+                  <h3 className="text-white font-black text-lg uppercase italic mb-2 drop-shadow-lg group-hover:text-[var(--color-gold)] transition-colors">
                     {player.name}
                   </h3>
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 text-[var(--color-gold)] fill-[var(--color-gold)]" />
+                      <motion.div
+                        key={i}
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.15 + 0.4 + i * 0.05 }}
+                      >
+                        <Star className="w-3 h-3 text-[var(--color-gold)] fill-[var(--color-gold)]" />
+                      </motion.div>
                     ))}
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Hover shine effect */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </motion.div>
             ))}
           </div>
 
           {/* Extra images row */}
-          <div className="grid grid-cols-3 gap-4 lg:gap-6 mt-4 lg:mt-6">
+          <div className="grid grid-cols-3 gap-4 lg:gap-6 mt-6 lg:mt-8">
             {[
               { src: "/players/player-1.jpg", name: "Elite Pack 1" },
               { src: "/players/player-2.jpg", name: "Elite Pack 2" },
@@ -458,25 +549,32 @@ export default function Home() {
             ].map((item, index) => (
               <motion.div
                 key={item.name}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative aspect-video rounded-2xl overflow-hidden border border-white/10 hover:border-[var(--color-gold)]/30 transition-all hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(251,239,11,0.1)]"
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                className="group relative aspect-video rounded-2xl overflow-hidden border border-white/15 hover:border-[var(--color-gold)]/40 transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(251,239,11,0.2)]"
+                whileHover={{ scale: 1.02 }}
               >
                 <Image
                   src={item.src}
                   alt={item.name}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   sizes="33vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#000F4D]/80 to-transparent" />
-                <div className="absolute bottom-3 left-3">
-                  <span className="text-white/70 font-bold text-xs uppercase tracking-wider">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#000F4D]/90 via-[#000F4D]/40 to-transparent group-hover:from-[#000F4D] transition-all duration-500" />
+                <motion.div
+                  className="absolute bottom-3 left-3"
+                  initial={{ x: -20, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.15 + 0.2 }}
+                >
+                  <span className="text-white font-bold text-sm uppercase tracking-wider drop-shadow-lg">
                     {item.name}
                   </span>
-                </div>
+                </motion.div>
               </motion.div>
             ))}
           </div>
@@ -498,51 +596,85 @@ export default function Home() {
             {ADMINS.map((admin, idx) => (
               <motion.div
                 key={admin.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.2 }}
-                className="flex flex-col items-center bg-[#001A88] p-8 rounded-3xl border border-[var(--color-gold)]/10 hover:border-[var(--color-gold)]/30 transition-all hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(251,239,11,0.15)] group"
+                transition={{
+                  duration: 0.6,
+                  delay: idx * 0.3,
+                  type: "spring",
+                  stiffness: 100,
+                }}
+                className="flex flex-col items-center bg-gradient-to-br from-[#001A88] to-[#0d0d44] p-8 rounded-3xl border border-[var(--color-gold)]/15 hover:border-[var(--color-gold)]/40 transition-all hover:-translate-y-3 hover:shadow-[0_0_40px_rgba(251,239,11,0.25)] group"
+                whileHover={{ scale: 1.05 }}
               >
-                <div className="w-32 h-32 rounded-full mb-6 bg-[#0022AA] border-4 border-[#000F4D] outline outline-2 outline-[var(--color-gold)]/50 overflow-hidden flex items-center justify-center relative group-hover:outline-[var(--color-gold)] transition-all">
+                <motion.div
+                  className="w-32 h-32 rounded-full mb-6 bg-gradient-to-br from-[#0022AA] to-[#000a44] border-4 border-[#000F4D] outline outline-2 outline-[var(--color-gold)]/50 overflow-hidden flex items-center justify-center relative group-hover:outline-[var(--color-gold)] transition-all shadow-lg"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  initial={{ rotate: -5 }}
+                >
                   {admin.image ? (
                     <Image
                       src={admin.image}
                       alt={admin.name}
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
                       sizes="128px"
                     />
                   ) : (
-                    <span className="text-4xl font-black text-[var(--color-gold)]/30">
+                    <span className="text-5xl font-black text-[var(--color-gold)]/40">
                       {admin.name.charAt(0)}
                     </span>
                   )}
-                </div>
+                </motion.div>
 
-                <h3 className="text-2xl font-black text-white uppercase italic mb-1 group-hover:text-gradient-gold transition-all">
+                <motion.h3
+                  className="text-2xl font-black text-white uppercase italic mb-2 group-hover:text-gradient-gold transition-all"
+                  initial={{ y: 10, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.3 + 0.2 }}
+                >
                   {admin.name}
-                </h3>
-                <span className="text-sm text-gray-400 font-bold uppercase tracking-wider mb-6">
+                </motion.h3>
+                <motion.span
+                  className="text-sm text-gray-400 font-bold uppercase tracking-wider mb-6"
+                  initial={{ y: 10, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.3 + 0.3 }}
+                >
                   {admin.role}
-                </span>
+                </motion.span>
 
                 {admin.whatsapp !== "#" ? (
-                  <a
+                  <motion.a
                     href={admin.whatsapp}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-auto px-4 py-3 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold rounded-xl flex items-center gap-2 transition-transform hover:scale-105 shadow-[0_0_15px_rgba(37,211,102,0.3)] text-sm"
+                    className="mt-auto px-4 py-3 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold rounded-xl flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(37,211,102,0.3)] text-sm"
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.3 + 0.4 }}
+                    whileHover={{
+                      scale: 1.08,
+                      boxShadow: "0 0 25px rgba(37,211,102,0.6)",
+                    }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     MESSAGE ON WHATSAPP
-                  </a>
+                  </motion.a>
                 ) : (
-                  <button
+                  <motion.button
                     disabled
                     className="mt-auto px-4 py-3 bg-white/5 text-gray-500 font-bold rounded-xl flex items-center gap-2 cursor-not-allowed border border-white/10 text-sm"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 0.5 }}
+                    viewport={{ once: true }}
                   >
                     LINK COMING SOON
-                  </button>
+                  </motion.button>
                 )}
               </motion.div>
             ))}

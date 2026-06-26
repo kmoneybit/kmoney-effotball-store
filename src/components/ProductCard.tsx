@@ -23,46 +23,50 @@ export default function ProductCard({
   );
 
   return (
-    <div className="group relative rounded-2xl border border-[var(--color-gold)]/20 bg-[#001A88] flex flex-col overflow-hidden transition-all duration-300 hover:border-[var(--color-gold)]/50 hover:shadow-[0_0_20px_rgba(251,239,11,0.25)] hover:-translate-y-1">
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-      <div className="relative h-56 w-full bg-[#0022AA] flex items-center justify-center overflow-hidden border-b border-white/5 group-hover:h-60 transition-all duration-300">
+    <div className="group relative rounded-2xl border border-[var(--color-gold)]/20 bg-gradient-to-br from-[#001A88] to-[#0d0d44] flex flex-col overflow-hidden transition-all duration-300 hover:border-[var(--color-gold)]/60 hover:shadow-[0_0_30px_rgba(251,239,11,0.35)] hover:-translate-y-2 animate-card-glow">
+      <div className="absolute inset-0 bg-gradient-to-br from-white/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+      <div className="relative h-56 w-full bg-gradient-to-b from-[#0022AA] to-[#000A33] flex items-center justify-center overflow-hidden border-b border-white/5 group-hover:h-64 transition-all duration-300 shadow-inner">
         <div className="absolute inset-0 bg-gradient-to-b from-[#001A88] via-[#0022AA] to-[#000A33]" />
-        <div className="absolute inset-0 bg-[var(--color-gold)]/10 blur-[50px] rounded-full z-0 group-hover:bg-[var(--color-gold)]/20 transition-all" />
+        <div className="absolute inset-0 bg-[var(--color-gold)]/8 blur-[60px] rounded-full z-0 group-hover:bg-[var(--color-gold)]/15 transition-all duration-500" />
         {imageUrl ? (
-          <Image 
-            src={imageUrl} 
+          <Image
+            src={imageUrl}
             alt={title}
             fill
-            className="relative z-10 object-cover object-top drop-shadow-[0_0_15px_rgba(251,239,11,0.15)] group-hover:scale-105 transition-transform duration-500"
+            className="relative z-10 object-cover object-top drop-shadow-[0_0_20px_rgba(251,239,11,0.2)] group-hover:scale-110 transition-transform duration-700 ease-out"
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         ) : (
-          <div className="relative z-10 flex flex-col items-center justify-center gap-3 text-[var(--color-gold)]/80">
-            <Zap className="w-16 h-16 opacity-70" />
-            <span className="text-sm uppercase tracking-[0.3em]">
+          <div className="relative z-10 flex flex-col items-center justify-center gap-3 text-[var(--color-gold)]/80 animate-float">
+            <Zap className="w-16 h-16 opacity-70 group-hover:animate-spin" />
+            <span className="text-sm uppercase tracking-[0.3em] font-bold">
               Premium Account
             </span>
           </div>
         )}
-        <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-1.5 z-20">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#25D366]" />
-          <span className="text-xs font-medium text-white/90">Verified</span>
+        <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15 flex items-center gap-1.5 z-20 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+          <ShieldCheck className="w-4 h-4 text-[#25D366] animate-pulse" />
+          <span className="text-xs font-bold text-white/95 uppercase">
+            Verified
+          </span>
         </div>
       </div>
 
       <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gradient-gold transition-all">
+        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gradient-gold transition-all duration-300 transform group-hover:scale-105">
           {title}
         </h3>
-        <p className="text-sm text-gray-400 mb-4 line-clamp-2">{description}</p>
+        <p className="text-sm text-gray-400 mb-4 line-clamp-2 group-hover:text-gray-300 transition-colors">
+          {description}
+        </p>
 
         <ul className="space-y-2 mb-6 flex-1">
           {highlights.map((highlight, idx) => (
             <li
               key={idx}
-              className="flex items-start gap-2 text-sm text-gray-300"
+              className="flex items-start gap-2 text-sm text-gray-300 transform transition-all duration-300 group-hover:translate-x-1 hover:text-white"
             >
-              <CheckCircle className="w-4 h-4 text-[var(--color-gold)] shrink-0 mt-0.5" />
+              <CheckCircle className="w-4 h-4 text-[var(--color-gold)] shrink-0 mt-0.5 group-hover:animate-pulse" />
               <span>{highlight}</span>
             </li>
           ))}
@@ -73,7 +77,7 @@ export default function ProductCard({
             href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
             target="_blank"
             rel="noreferrer"
-            className="w-full py-3 bg-[var(--color-gold)] hover:bg-[var(--color-gold-hover)] text-[#000F4D] italic font-black text-lg uppercase tracking-wider rounded-xl flex items-center justify-center transition-all shadow-[0_0_15px_rgba(251,239,11,0.2)] hover:shadow-[0_0_25px_rgba(251,239,11,0.4)]"
+            className="w-full py-3 bg-[var(--color-gold)] hover:bg-[var(--color-gold-hover)] text-[#000F4D] italic font-black text-lg uppercase tracking-wider rounded-xl flex items-center justify-center transition-all shadow-[0_0_15px_rgba(251,239,11,0.2)] hover:shadow-[0_0_30px_rgba(251,239,11,0.5)] transform hover:scale-105 active:scale-95"
           >
             Buy via WhatsApp
           </a>

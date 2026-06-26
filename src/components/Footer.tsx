@@ -33,12 +33,6 @@ export default function Footer() {
             Browse Accounts
           </a>
           <Link
-            href="/admin"
-            className="text-gray-400 hover:text-[var(--color-gold)] text-sm transition-colors"
-          >
-            Admin Dashboard
-          </Link>
-          <Link
             href="https://wa.me/2347062826313"
             className="text-gray-400 hover:text-[var(--color-gold)] text-sm transition-colors"
           >

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { CheckCircle, ShieldCheck, Zap } from "lucide-react";
 import React from "react";
 
@@ -24,15 +25,26 @@ export default function ProductCard({
   return (
     <div className="group relative rounded-2xl border border-[var(--color-gold)]/20 bg-[#001A88] flex flex-col overflow-hidden transition-all duration-300 hover:border-[var(--color-gold)]/50 hover:shadow-[0_0_20px_rgba(251,239,11,0.25)] hover:-translate-y-1">
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-      <div className="relative h-48 w-full bg-[#0022AA] flex items-center justify-center overflow-hidden border-b border-white/5">
+      <div className="relative h-56 w-full bg-[#0022AA] flex items-center justify-center overflow-hidden border-b border-white/5 group-hover:h-60 transition-all duration-300">
         <div className="absolute inset-0 bg-gradient-to-b from-[#001A88] via-[#0022AA] to-[#000A33]" />
-        <div className="relative z-10 flex flex-col items-center justify-center gap-3 text-[var(--color-gold)]/80">
-          <Zap className="w-16 h-16 opacity-70" />
-          <span className="text-sm uppercase tracking-[0.3em]">
-            Premium Account
-          </span>
-        </div>
-        <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-1.5">
+        <div className="absolute inset-0 bg-[var(--color-gold)]/10 blur-[50px] rounded-full z-0 group-hover:bg-[var(--color-gold)]/20 transition-all" />
+        {imageUrl ? (
+          <Image 
+            src={imageUrl} 
+            alt={title}
+            fill
+            className="relative z-10 object-cover object-top drop-shadow-[0_0_15px_rgba(251,239,11,0.15)] group-hover:scale-105 transition-transform duration-500"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+        ) : (
+          <div className="relative z-10 flex flex-col items-center justify-center gap-3 text-[var(--color-gold)]/80">
+            <Zap className="w-16 h-16 opacity-70" />
+            <span className="text-sm uppercase tracking-[0.3em]">
+              Premium Account
+            </span>
+          </div>
+        )}
+        <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-1.5 z-20">
           <ShieldCheck className="w-3.5 h-3.5 text-[#25D366]" />
           <span className="text-xs font-medium text-white/90">Verified</span>
         </div>

@@ -39,12 +39,6 @@ export default function Navbar() {
             Accounts
           </a>
           <Link
-            href="/admin"
-            className="hover:text-[var(--color-gold)] transition-colors"
-          >
-            Admin
-          </Link>
-          <Link
             href="https://wa.me/2347062826313"
             target="_blank"
             className="px-6 py-2 bg-[var(--color-gold)] text-[#000F4D] italic font-black rounded-md hover:bg-[var(--color-gold-hover)] transition-colors shadow-[0_0_15px_rgba(251,239,11,0.2)]"
@@ -91,13 +85,6 @@ export default function Navbar() {
               >
                 Accounts
               </a>
-              <Link
-                onClick={() => setIsOpen(false)}
-                href="/admin"
-                className="px-4 py-2 hover:bg-white/5 rounded-lg active:text-[var(--color-gold)] transition-colors"
-              >
-                Admin Dashboard
-              </Link>
               <Link
                 onClick={() => setIsOpen(false)}
                 href="https://wa.me/2347062826313"

@@ -8,10 +8,12 @@ import ProductCard from "@/components/ProductCard";
 import { useState, useEffect } from "react";
 
 const HERO_PLAYERS = [
-  { src: "/players/messi.jpg", alt: "Messi" },
-  { src: "/players/batistuta.jpg", alt: "Batistuta" },
-  { src: "/players/son.jpg", alt: "Son Heung-min" },
-  { src: "/players/forlan.jpg", alt: "Diego Forlan" },
+  { src: "/players/neymar-concept.jpg", alt: "Neymar Jr" },
+  { src: "/players/ronaldo-concept.jpg", alt: "Ronaldo" },
+  { src: "/players/son-blitz.jpg", alt: "Son Blitz" },
+  { src: "/players/messi-card.jpg", alt: "Messi (Card)" },
+  { src: "/players/goats.jpg", alt: "GOATs" },
+  { src: "/players/showcase-1.jpg", alt: "Showcase 1" },
 ];
 
 const FEATURED_ACCOUNTS = [
@@ -39,7 +41,7 @@ const FEATURED_ACCOUNTS = [
       "Fully Trained Squad",
       "5,000 eFootball Coins",
     ],
-    imageUrl: "/players/son.jpg",
+    imageUrl: "/players/son-blitz.jpg",
   },
   {
     id: "acc-3",
@@ -53,6 +55,71 @@ const FEATURED_ACCOUNTS = [
       "2,000 eFootball Coins",
     ],
     imageUrl: "/players/player-1.jpg",
+  },
+  {
+    id: "acc-4",
+    title: "Neymar Master Class",
+    description:
+      "Build around the magic of Neymar with this premium concept account featuring creative players.",
+    highlights: [
+      "6x Epic Cards",
+      "12x Showtime Players",
+      "Attacking Playstyle",
+      "20,000 eFootball Coins",
+    ],
+    imageUrl: "/players/neymar-concept.jpg",
+  },
+  {
+    id: "acc-5",
+    title: "Ronaldo Championship",
+    description:
+      "Experience the power and precision of a Ronaldo-focused squad with top-tier strikers.",
+    highlights: [
+      "7x Epic Cards",
+      "15x Premium Players",
+      "Elite Striker Setup",
+      "25,000 eFootball Coins",
+    ],
+    imageUrl: "/players/ronaldo-concept.jpg",
+  },
+  {
+    id: "acc-6",
+    title: "Messi Showcase",
+    description:
+      "A creative playmaker-focused account featuring unique Messi cards and flair.",
+    highlights: [
+      "5x Epic Cards",
+      "10x Premium Players",
+      "Playmaker Style",
+      "12,000 eFootball Coins",
+    ],
+    imageUrl: "/players/messi-card.jpg",
+  },
+  {
+    id: "acc-7",
+    title: "Showcase Collection",
+    description:
+      "Curated showcase accounts for streaming and content creators.",
+    highlights: [
+      "Multiple Showcase Players",
+      "High Appeal Squad",
+      "Fully Trained",
+      "10,000 eFootball Coins",
+    ],
+    imageUrl: "/players/showcase-2.jpg",
+  },
+  {
+    id: "acc-8",
+    title: "GOATs Ultimate",
+    description:
+      "A legendary collection featuring GOAT-tier players across eras.",
+    highlights: [
+      "Legendary Cards",
+      "Top Chemistry",
+      "Collector's Item",
+      "30,000 eFootball Coins",
+    ],
+    imageUrl: "/players/goats.jpg",
   },
 ];
 

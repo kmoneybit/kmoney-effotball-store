@@ -16,110 +16,69 @@ const HERO_PLAYERS = [
   { src: "/players/showcase-1.jpg", alt: "Showcase 1" },
 ];
 
+const ACCOUNT_ANIMATION_IMAGES = [
+  { src: "/available-accounts/18k-account.jpg", alt: "Account 18k" },
+  { src: "/available-accounts/50k-account.jpg", alt: "Account 50k" },
+  { src: "/available-accounts/40k-account.jpg", alt: "Account 40k" },
+  { src: "/available-accounts/50k-2.jpg", alt: "Account 50k" },
+];
+
 const FEATURED_ACCOUNTS = [
   {
     id: "acc-1",
-    title: "Epic Big Time Squad",
+    title: "Account 18k",
     description:
-      "A fully loaded account featuring top-tier Big Time legends and absolute game-changers.",
+      "Ready-to-use premium account loaded with top players and strong chemistry.",
     highlights: [
-      "5x Epic Cards",
-      "10x Showtime Players",
-      "Division 1 Ready",
-      "15,000 eFootball Coins",
+      "High team rating",
+      "Top attacker lineup",
+      "Perfect for fast progress",
+      "Quick delivery via WhatsApp",
     ],
-    imageUrl: "/players/batistuta.jpg",
+    price: "18k",
+    imageUrl: "/available-accounts/18k-account.jpg",
   },
   {
     id: "acc-2",
-    title: "Showtime Legends Pack",
+    title: "Account 50k",
     description:
-      "Perfect for competitive players looking to dominate the midfield and attack.",
+      "Strong showcase account with elite players ready for competitive play.",
     highlights: [
-      "3x Epic Cards",
-      "8x Showtime Players",
-      "Fully Trained Squad",
-      "5,000 eFootball Coins",
+      "Premium player cards",
+      "Excellent squad depth",
+      "Strong chemistry",
+      "Fast delivery and support",
     ],
-    imageUrl: "/players/son-blitz.jpg",
+    price: "50k",
+    imageUrl: "/available-accounts/50k-account.jpg",
   },
   {
     id: "acc-3",
-    title: "Starter Pro Edition",
+    title: "Account 40k",
     description:
-      "Get a huge head start with this well-rounded account featuring META standard and POTW cards.",
+      "Balanced account built for versatile play and great value in every position.",
     highlights: [
-      "15x Premium POTW",
-      "High Team Playstyle",
-      "Great for Beginners",
-      "2,000 eFootball Coins",
+      "Quality midfielder core",
+      "Easy to play formation",
+      "Division-ready squad",
+      "Secure WhatsApp checkout",
     ],
-    imageUrl: "/players/player-1.jpg",
+    price: "40k",
+    imageUrl: "/available-accounts/40k-account.jpg",
   },
   {
     id: "acc-4",
-    title: "Neymar Master Class",
+    title: "Account 50k",
     description:
-      "Build around the magic of Neymar with this premium concept account featuring creative players.",
+      "Another premium option with elite cards and a high collective strength rating.",
     highlights: [
-      "6x Epic Cards",
-      "12x Showtime Players",
-      "Attacking Playstyle",
-      "20,000 eFootball Coins",
+      "High overall rating",
+      "Excellent attack options",
+      "Strategic squad build",
+      "Fast WhatsApp ordering",
     ],
-    imageUrl: "/players/neymar-concept.jpg",
-  },
-  {
-    id: "acc-5",
-    title: "Ronaldo Championship",
-    description:
-      "Experience the power and precision of a Ronaldo-focused squad with top-tier strikers.",
-    highlights: [
-      "7x Epic Cards",
-      "15x Premium Players",
-      "Elite Striker Setup",
-      "25,000 eFootball Coins",
-    ],
-    imageUrl: "/players/ronaldo-concept.jpg",
-  },
-  {
-    id: "acc-6",
-    title: "Messi Showcase",
-    description:
-      "A creative playmaker-focused account featuring unique Messi cards and flair.",
-    highlights: [
-      "5x Epic Cards",
-      "10x Premium Players",
-      "Playmaker Style",
-      "12,000 eFootball Coins",
-    ],
-    imageUrl: "/players/messi-card.jpg",
-  },
-  {
-    id: "acc-7",
-    title: "Showcase Collection",
-    description:
-      "Curated showcase accounts for streaming and content creators.",
-    highlights: [
-      "Multiple Showcase Players",
-      "High Appeal Squad",
-      "Fully Trained",
-      "10,000 eFootball Coins",
-    ],
-    imageUrl: "/players/showcase-2.jpg",
-  },
-  {
-    id: "acc-8",
-    title: "GOATs Ultimate",
-    description:
-      "A legendary collection featuring GOAT-tier players across eras.",
-    highlights: [
-      "Legendary Cards",
-      "Top Chemistry",
-      "Collector's Item",
-      "30,000 eFootball Coins",
-    ],
-    imageUrl: "/players/goats.jpg",
+    price: "50k",
+    imageUrl: "/available-accounts/50k-2.jpg",
   },
 ];
 
@@ -485,6 +444,53 @@ export default function Home() {
                 Request Service
               </motion.span>
             </motion.a>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-[#02072f]">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="text-sm uppercase tracking-[0.35em] text-[var(--color-gold)] mb-4">
+              Available Accounts
+            </p>
+            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
+              Instant WhatsApp <span className="text-gradient-gold">Order</span>
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Tap through the account previews below, then scroll down to pick
+              your price and send your order instantly.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {ACCOUNT_ANIMATION_IMAGES.map((account, index) => (
+              <motion.div
+                key={account.alt + index}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -8, scale: 1.03 }}
+                className="overflow-hidden rounded-3xl border border-white/10 bg-[#011244] shadow-[0_0_40px_rgba(0,0,0,0.25)]"
+              >
+                <div className="relative h-52 w-full overflow-hidden">
+                  <Image
+                    src={account.src}
+                    alt={account.alt}
+                    fill
+                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#000A2D]/80 to-transparent" />
+                </div>
+                <div className="p-4 text-center">
+                  <p className="text-sm uppercase tracking-[0.45em] text-gray-400 mb-2">
+                    {account.alt}
+                  </p>
+                  <div className="mx-auto h-1 w-14 rounded-full bg-[var(--color-gold)]/50" />
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

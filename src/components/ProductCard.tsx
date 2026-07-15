@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import { CheckCircle, ShieldCheck, Zap } from "lucide-react";
 import React from "react";
@@ -8,18 +7,20 @@ export interface ProductProps {
   title: string;
   description: string;
   highlights: string[];
-  imageUrl?: string;
+  price: string;
+  imageUrl: string;
 }
 
 export default function ProductCard({
   title,
   description,
   highlights,
+  price,
   imageUrl,
 }: ProductProps) {
   const whatsappNumber = "2347062826313";
   const whatsappMessage = encodeURIComponent(
-    `Hi KMoney Store, I am interested in buying the ${title} account. Is it still available?`,
+    `Hi KMoney Store, I want to buy this account: ${title}. Price: ${price}. Please confirm availability. Image: ${imageUrl}`,
   );
 
   return (
@@ -53,9 +54,16 @@ export default function ProductCard({
       </div>
 
       <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gradient-gold transition-all duration-300 transform group-hover:scale-105">
-          {title}
-        </h3>
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <h3 className="text-xl font-bold text-white group-hover:text-gradient-gold transition-all duration-300 transform group-hover:scale-105">
+            {title}
+          </h3>
+          {price ? (
+            <span className="rounded-full border border-[var(--color-gold)]/30 bg-[var(--color-gold)]/10 px-3 py-1.5 text-sm font-semibold uppercase tracking-[0.2em] text-[var(--color-gold)]">
+              {price}
+            </span>
+          ) : null}
+        </div>
         <p className="text-sm text-gray-400 mb-4 line-clamp-2 group-hover:text-gray-300 transition-colors">
           {description}
         </p>
@@ -79,7 +87,7 @@ export default function ProductCard({
             rel="noreferrer"
             className="w-full py-3 bg-[var(--color-gold)] hover:bg-[var(--color-gold-hover)] text-[#000F4D] italic font-black text-lg uppercase tracking-wider rounded-xl flex items-center justify-center transition-all shadow-[0_0_15px_rgba(251,239,11,0.2)] hover:shadow-[0_0_30px_rgba(251,239,11,0.5)] transform hover:scale-105 active:scale-95"
           >
-            Buy via WhatsApp
+            Shop Now
           </a>
         </div>
       </div>

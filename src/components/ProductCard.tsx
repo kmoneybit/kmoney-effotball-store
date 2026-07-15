@@ -9,6 +9,7 @@ export interface ProductProps {
   highlights: string[];
   price: string;
   imageUrl: string;
+  sold?: boolean;
 }
 
 export default function ProductCard({
@@ -17,6 +18,7 @@ export default function ProductCard({
   highlights,
   price,
   imageUrl,
+  sold,
 }: ProductProps) {
   const whatsappNumber = "2347062826313";
   const whatsappMessage = encodeURIComponent(
@@ -34,7 +36,7 @@ export default function ProductCard({
             src={imageUrl}
             alt={title}
             fill
-            className="relative z-10 object-cover object-top drop-shadow-[0_0_20px_rgba(251,239,11,0.2)] group-hover:scale-110 transition-transform duration-700 ease-out"
+            className={`relative z-10 object-cover object-top drop-shadow-[0_0_20px_rgba(251,239,11,0.2)] group-hover:scale-110 transition-transform duration-700 ease-out ${sold ? "filter grayscale brightness-75 opacity-60" : ""}`}
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         ) : (
@@ -45,6 +47,11 @@ export default function ProductCard({
             </span>
           </div>
         )}
+        {sold ? (
+          <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1.5 rounded-full border border-white/10 z-30 shadow-lg text-sm font-bold uppercase">
+            SOLD
+          </div>
+        ) : null}
         <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15 flex items-center gap-1.5 z-20 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
           <ShieldCheck className="w-4 h-4 text-[#25D366] animate-pulse" />
           <span className="text-xs font-bold text-white/95 uppercase">
@@ -81,14 +88,23 @@ export default function ProductCard({
         </ul>
 
         <div className="flex flex-col gap-4 mt-auto">
-          <a
-            href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
-            target="_blank"
-            rel="noreferrer"
-            className="w-full py-3 bg-[var(--color-gold)] hover:bg-[var(--color-gold-hover)] text-[#000F4D] italic font-black text-lg uppercase tracking-wider rounded-xl flex items-center justify-center transition-all shadow-[0_0_15px_rgba(251,239,11,0.2)] hover:shadow-[0_0_30px_rgba(251,239,11,0.5)] transform hover:scale-105 active:scale-95"
-          >
-            Shop Now
-          </a>
+          {sold ? (
+            <span
+              aria-disabled
+              className="w-full py-3 bg-gray-700 text-white italic font-black text-lg uppercase tracking-wider rounded-xl flex items-center justify-center transition-all shadow-inner cursor-not-allowed"
+            >
+              Sold
+            </span>
+          ) : (
+            <a
+              href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-3 bg-[var(--color-gold)] hover:bg-[var(--color-gold-hover)] text-[#000F4D] italic font-black text-lg uppercase tracking-wider rounded-xl flex items-center justify-center transition-all shadow-[0_0_15px_rgba(251,239,11,0.2)] hover:shadow-[0_0_30px_rgba(251,239,11,0.5)] transform hover:scale-105 active:scale-95"
+            >
+              Shop Now
+            </a>
+          )}
         </div>
       </div>
     </div>

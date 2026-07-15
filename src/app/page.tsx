@@ -51,6 +51,7 @@ const FEATURED_ACCOUNTS = [
     ],
     price: "50k",
     imageUrl: "/available-accounts/50k-account.jpg",
+    sold: true,
   },
   {
     id: "acc-3",

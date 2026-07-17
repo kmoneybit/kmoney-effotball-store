@@ -17,10 +17,24 @@ const HERO_PLAYERS = [
 ];
 
 const ACCOUNT_ANIMATION_IMAGES = [
-  { src: "/available-accounts/18k-account.jpg", alt: "Account 18k" },
-  { src: "/available-accounts/50k-account.jpg", alt: "Account 50k" },
-  { src: "/available-accounts/40k-account.jpg", alt: "Account 40k" },
-  { src: "/available-accounts/50k-2.jpg", alt: "Account 50k" },
+  {
+    src: "/available-accounts/18k-account.jpg",
+    alt: "Account 18k",
+    sold: true,
+  },
+  {
+    src: "/available-accounts/50k-account.jpg",
+    alt: "Account 50k",
+    sold: true,
+  },
+  {
+    src: "/available-accounts/40k-account.jpg",
+    alt: "Account 40k",
+    sold: true,
+  },
+  { src: "/available-accounts/50k-2.jpg", alt: "Account 50k", sold: true },
+  { src: "/available-accounts/38K ID .jpeg", alt: "Account 38k", sold: false },
+  { src: "/available-accounts/48K ID.jpeg", alt: "Account 48k", sold: false },
 ];
 
 const FEATURED_ACCOUNTS = [
@@ -37,6 +51,7 @@ const FEATURED_ACCOUNTS = [
     ],
     price: "18k",
     imageUrl: "/available-accounts/18k-account.jpg",
+    sold: true,
   },
   {
     id: "acc-2",
@@ -66,6 +81,7 @@ const FEATURED_ACCOUNTS = [
     ],
     price: "40k",
     imageUrl: "/available-accounts/40k-account.jpg",
+    sold: true,
   },
   {
     id: "acc-4",
@@ -80,6 +96,25 @@ const FEATURED_ACCOUNTS = [
     ],
     price: "50k",
     imageUrl: "/available-accounts/50k-2.jpg",
+    sold: true,
+  },
+  {
+    id: "acc-5",
+    title: "Account 38k",
+    description: "Newly added account available now.",
+    highlights: ["Good value", "Ready to use", "Fast delivery"],
+    price: "38k",
+    imageUrl: "/available-accounts/38K ID .jpeg",
+    sold: false,
+  },
+  {
+    id: "acc-6",
+    title: "Account 48k",
+    description: "Newly added account available now.",
+    highlights: ["Premium cards", "Secure checkout", "Quick support"],
+    price: "48k",
+    imageUrl: "/available-accounts/48K ID.jpeg",
+    sold: false,
   },
 ];
 
@@ -465,7 +500,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {ACCOUNT_ANIMATION_IMAGES.map((account, index) => (
+            {ACCOUNT_ANIMATION_IMAGES.map((account: any, index) => (
               <motion.div
                 key={account.alt + index}
                 initial={{ opacity: 0, y: 30 }}
@@ -479,10 +514,15 @@ export default function Home() {
                     src={account.src}
                     alt={account.alt}
                     fill
-                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                    className={`object-cover object-center transition-transform duration-700 group-hover:scale-105 ${account.sold ? "filter grayscale brightness-75 opacity-60" : ""}`}
                     sizes="(max-width: 768px) 100vw, 25vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#000A2D]/80 to-transparent" />
+                  {account.sold ? (
+                    <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1.5 rounded-full border border-white/10 z-30 shadow-lg text-sm font-bold uppercase">
+                      SOLD
+                    </div>
+                  ) : null}
                 </div>
                 <div className="p-4 text-center">
                   <p className="text-sm uppercase tracking-[0.45em] text-gray-400 mb-2">

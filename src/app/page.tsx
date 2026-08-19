@@ -16,109 +16,15 @@ const HERO_PLAYERS = [
   { src: "/players/showcase-1.jpg", alt: "Showcase 1" },
 ];
 
-const ACCOUNT_ANIMATION_IMAGES = [
-  {
-    src: "/available-accounts/18k-account.jpg",
-    alt: "Account 18k",
-    sold: true,
-  },
-  {
-    src: "/available-accounts/50k-account.jpg",
-    alt: "Account 50k",
-    sold: true,
-  },
-  {
-    src: "/available-accounts/40k-account.jpg",
-    alt: "Account 40k",
-    sold: true,
-  },
-  { src: "/available-accounts/50k-2.jpg", alt: "Account 50k", sold: true },
-  { src: "/available-accounts/38K ID .jpeg", alt: "Account 38k", sold: false },
-  { src: "/available-accounts/48K ID.jpeg", alt: "Account 48k", sold: false },
-];
-
-const STORAGE_KEY = "kmoney-admin-accounts-v1";
-
-const DEFAULT_FEATURED_ACCOUNTS = [
-  {
-    id: "acc-1",
-    title: "Account 18k",
-    description:
-      "Ready-to-use premium account loaded with top players and strong chemistry.",
-    highlights: [
-      "High team rating",
-      "Top attacker lineup",
-      "Perfect for fast progress",
-      "Quick delivery via WhatsApp",
-    ],
-    price: "18k",
-    imageUrl: "/available-accounts/18k-account.jpg",
-    sold: true,
-  },
-  {
-    id: "acc-2",
-    title: "Account 50k",
-    description:
-      "Strong showcase account with elite players ready for competitive play.",
-    highlights: [
-      "Premium player cards",
-      "Excellent squad depth",
-      "Strong chemistry",
-      "Fast delivery and support",
-    ],
-    price: "50k",
-    imageUrl: "/available-accounts/50k-account.jpg",
-    sold: true,
-  },
-  {
-    id: "acc-3",
-    title: "Account 40k",
-    description:
-      "Balanced account built for versatile play and great value in every position.",
-    highlights: [
-      "Quality midfielder core",
-      "Easy to play formation",
-      "Division-ready squad",
-      "Secure WhatsApp checkout",
-    ],
-    price: "40k",
-    imageUrl: "/available-accounts/40k-account.jpg",
-    sold: true,
-  },
-  {
-    id: "acc-4",
-    title: "Account 50k",
-    description:
-      "Another premium option with elite cards and a high collective strength rating.",
-    highlights: [
-      "High overall rating",
-      "Excellent attack options",
-      "Strategic squad build",
-      "Fast WhatsApp ordering",
-    ],
-    price: "50k",
-    imageUrl: "/available-accounts/50k-2.jpg",
-    sold: true,
-  },
-  {
-    id: "acc-5",
-    title: "Account 38k",
-    description: "Newly added account available now.",
-    highlights: ["Good value", "Ready to use", "Fast delivery"],
-    price: "38k",
-    imageUrl: "/available-accounts/38K ID .jpeg",
-    sold: false,
-  },
-  {
-    id: "acc-6",
-    title: "Account 48k",
-    description: "Newly added account available now.",
-    highlights: ["Premium cards", "Secure checkout", "Quick support"],
-    price: "48k",
-    imageUrl: "/available-accounts/48K ID.jpeg",
-    sold: false,
-  },
-];
+const DEFAULT_FEATURED_ACCOUNTS: Array<{
+  id: string;
+  title: string;
+  description: string;
+  highlights: string[];
+  price: string;
+  imageUrl: string;
+  sold: boolean;
+}> = [];
 
 const categoryHighlights: Record<string, string[]> = {
   Premium: ["Elite squad", "Fast progress", "Verified account"],
@@ -127,14 +33,14 @@ const categoryHighlights: Record<string, string[]> = {
   Value: ["Good value", "Balanced squad", "Fast support"],
 };
 
-const getStoreAccounts = () => {
-  if (typeof window === "undefined") return DEFAULT_FEATURED_ACCOUNTS;
-
+const getStoreAccounts = async () => {
   try {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (!saved) return DEFAULT_FEATURED_ACCOUNTS;
+    const response = await fetch("/api/accounts");
+    if (!response.ok) {
+      return DEFAULT_FEATURED_ACCOUNTS;
+    }
 
-    const parsed = JSON.parse(saved) as Array<{
+    const parsed = (await response.json()) as Array<{
       id: number;
       title: string;
       status: "Active" | "Sold";
@@ -143,8 +49,8 @@ const getStoreAccounts = () => {
       imageDataUrl?: string;
     }>;
 
-    if (!Array.isArray(parsed) || parsed.length === 0) {
-      return DEFAULT_FEATURED_ACCOUNTS;
+    if (!Array.isArray(parsed)) {
+      return [];
     }
 
     return parsed.map((account) => ({
@@ -161,16 +67,8 @@ const getStoreAccounts = () => {
       sold: account.status === "Sold",
     }));
   } catch {
-    return DEFAULT_FEATURED_ACCOUNTS;
+    return [];
   }
-};
-
-const syncStoreAccounts = () => {
-  if (typeof window === "undefined") return;
-  const nextAccounts = getStoreAccounts();
-  window.dispatchEvent(
-    new CustomEvent("kmoney-accounts-updated", { detail: nextAccounts }),
-  );
 };
 
 const ADMINS = [
@@ -559,58 +457,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-20 bg-[#02072f]">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center mb-12">
-            <p className="text-sm uppercase tracking-[0.35em] text-[var(--color-gold)] mb-4">
-              Available Accounts
-            </p>
-            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
-              Instant WhatsApp <span className="text-gradient-gold">Order</span>
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Tap through the account previews below, then scroll down to pick
-              your price and send your order instantly.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {ACCOUNT_ANIMATION_IMAGES.map((account: any, index) => (
-              <motion.div
-                key={account.alt + index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -8, scale: 1.03 }}
-                className="overflow-hidden rounded-3xl border border-white/10 bg-[#011244] shadow-[0_0_40px_rgba(0,0,0,0.25)]"
-              >
-                <div className="relative h-52 w-full overflow-hidden">
-                  <Image
-                    src={account.src}
-                    alt={account.alt}
-                    fill
-                    className={`object-cover object-center transition-transform duration-700 group-hover:scale-105 ${account.sold ? "filter grayscale brightness-75 opacity-60" : ""}`}
-                    sizes="(max-width: 768px) 100vw, 25vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#000A2D]/80 to-transparent" />
-                  {account.sold ? (
-                    <div className="absolute top-3 left-3 bg-red-600 text-white px-3 py-1.5 rounded-full border border-white/10 z-30 shadow-lg text-sm font-bold uppercase">
-                      SOLD
-                    </div>
-                  ) : null}
-                </div>
-                <div className="p-4 text-center">
-                  <p className="text-sm uppercase tracking-[0.45em] text-gray-400 mb-2">
-                    {account.alt}
-                  </p>
-                  <div className="mx-auto h-1 w-14 rounded-full bg-[var(--color-gold)]/50" />
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ═══════════ FEATURED ACCOUNTS ═══════════ */}
       <section id="products" className="py-24 bg-[#000B33] relative">
         <div className="container mx-auto px-4 lg:px-8">
@@ -635,11 +481,18 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredAccounts.map((account) => (
-              <ProductCard key={account.id} {...account} />
-            ))}
-          </div>
+          {featuredAccounts.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-[var(--color-gold)]/30 bg-[#001A88]/60 p-10 text-center text-gray-300">
+              No accounts posted yet. Add your first listing from the admin
+              page.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredAccounts.map((account) => (
+                <ProductCard key={account.id} {...account} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

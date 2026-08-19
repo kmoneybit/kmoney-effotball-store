@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readAccounts, writeAccounts } from "@/lib/accounts";
+import { readAccounts, type StoreAccount, writeAccounts } from "@/lib/accounts";
 
 export async function GET() {
   const accounts = await readAccounts();
@@ -10,8 +10,8 @@ export async function POST(request: Request) {
   const body = await request.json();
   const current = await readAccounts();
 
-  const nextAccount = {
-    id: body.id ?? Date.now(),
+  const nextAccount: StoreAccount = {
+    id: Number(body.id ?? Date.now()),
     title: String(body.title ?? "New Account").trim(),
     status: body.status === "Sold" ? "Sold" : "Active",
     category: String(body.category ?? "Premium"),
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     imageDataUrl: body.imageDataUrl ?? "",
   };
 
-  const nextAccounts = [nextAccount, ...current];
+  const nextAccounts: StoreAccount[] = [nextAccount, ...current];
   await writeAccounts(nextAccounts);
 
   return NextResponse.json(nextAccounts);
@@ -30,8 +30,8 @@ export async function PUT(request: Request) {
   const body = await request.json();
   const current = await readAccounts();
 
-  const updated = current.map((account) =>
-    account.id === body.id
+  const updated: StoreAccount[] = current.map((account) =>
+    account.id === Number(body.id)
       ? {
           ...account,
           title: String(body.title ?? account.title),

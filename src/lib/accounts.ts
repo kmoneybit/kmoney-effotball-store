@@ -11,40 +11,7 @@ export type StoreAccount = {
   imageDataUrl?: string;
 };
 
-export const defaultAccounts: StoreAccount[] = [
-  {
-    id: 1,
-    title: "Epic Big Time Squad",
-    status: "Active",
-    category: "Premium",
-    price: "18k",
-    added: "2026-05-20",
-  },
-  {
-    id: 2,
-    title: "Showtime Legends Pack",
-    status: "Active",
-    category: "Legend",
-    price: "50k",
-    added: "2026-05-22",
-  },
-  {
-    id: 3,
-    title: "Starter Pro Edition",
-    status: "Sold",
-    category: "Starter",
-    price: "12k",
-    added: "2026-05-25",
-  },
-  {
-    id: 4,
-    title: "Weekend Goal Rush",
-    status: "Active",
-    category: "Value",
-    price: "22k",
-    added: "2026-05-28",
-  },
-];
+export const defaultAccounts: StoreAccount[] = [];
 
 const dataFilePath = path.join(process.cwd(), "data", "accounts.json");
 
@@ -72,16 +39,14 @@ export async function readAccounts(): Promise<StoreAccount[]> {
       JSON.stringify(defaultAccounts, null, 2),
       "utf8",
     );
-    return defaultAccounts;
+    return [];
   }
 
   try {
     const parsed = JSON.parse(fileContents) as StoreAccount[];
-    return Array.isArray(parsed) && parsed.length > 0
-      ? parsed
-      : defaultAccounts;
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return defaultAccounts;
+    return [];
   }
 }
 

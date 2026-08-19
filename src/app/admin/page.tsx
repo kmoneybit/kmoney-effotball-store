@@ -27,49 +27,7 @@ type Account = {
   imageDataUrl?: string;
 };
 
-const defaultAdminAccounts: Account[] = [
-  {
-    id: 1,
-    title: "Epic Big Time Squad",
-    status: "Active",
-    category: "Premium",
-    price: "18k",
-    added: "2026-05-20",
-  },
-  {
-    id: 2,
-    title: "Showtime Legends Pack",
-    status: "Active",
-    category: "Legend",
-    price: "50k",
-    added: "2026-05-22",
-  },
-  {
-    id: 3,
-    title: "Starter Pro Edition",
-    status: "Sold",
-    category: "Starter",
-    price: "12k",
-    added: "2026-05-25",
-  },
-  {
-    id: 4,
-    title: "Weekend Goal Rush",
-    status: "Active",
-    category: "Value",
-    price: "22k",
-    added: "2026-05-28",
-  },
-];
-
-const STORAGE_KEY = "kmoney-admin-accounts-v1";
-
-const saveAccounts = (nextAccounts: Account[]) => {
-  if (typeof window === "undefined") return;
-
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextAccounts));
-  window.dispatchEvent(new CustomEvent("kmoney-accounts-updated"));
-};
+const defaultAdminAccounts: Account[] = [];
 
 const loadAccounts = async () => {
   const response = await fetch("/api/accounts");
@@ -78,7 +36,7 @@ const loadAccounts = async () => {
   }
 
   const data = (await response.json()) as Account[];
-  return Array.isArray(data) && data.length > 0 ? data : defaultAdminAccounts;
+  return Array.isArray(data) ? data : defaultAdminAccounts;
 };
 
 const formDefaults = {
@@ -138,11 +96,6 @@ export default function AdminDashboard() {
       window.removeEventListener("kmoney-accounts-updated", sync);
     };
   }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    saveAccounts(accounts);
-  }, [accounts]);
 
   const filteredAccounts = useMemo(() => {
     return accounts.filter((account) => {

@@ -39,6 +39,9 @@ const loadAccounts = async () => {
   return Array.isArray(data) ? data : defaultAdminAccounts;
 };
 
+const ADMIN_ACCESS_CODE = "2023";
+const ADMIN_ACCESS_KEY = "kmoney-admin-access";
+
 const formDefaults = {
   title: "",
   category: "Premium",
@@ -73,6 +76,16 @@ export default function AdminDashboard() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState(formDefaults);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [accessCode, setAccessCode] = useState("");
+  const [accessError, setAccessError] = useState("");
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem(ADMIN_ACCESS_KEY);
+    if (saved === "true") {
+      setIsUnlocked(true);
+    }
+  }, []);
 
   useEffect(() => {
     let ignore = false;
@@ -218,6 +231,19 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleUnlock = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (accessCode.trim() === ADMIN_ACCESS_CODE) {
+      window.localStorage.setItem(ADMIN_ACCESS_KEY, "true");
+      setIsUnlocked(true);
+      setAccessError("");
+      return;
+    }
+
+    setAccessError("Incorrect code. Access denied.");
+  };
+
   const toggleStatus = async (id: number) => {
     const currentAccount = accounts.find((account) => account.id === id);
     if (!currentAccount) return;
@@ -240,6 +266,48 @@ export default function AdminDashboard() {
       setAccounts(nextAccounts);
     }
   };
+
+  if (!isUnlocked) {
+    return (
+      <div className="flex min-h-[80vh] items-center justify-center bg-[#000B33] px-4">
+        <div className="w-full max-w-md rounded-3xl border border-[var(--color-gold)]/20 bg-[#001A88] p-8 shadow-[0_0_40px_rgba(0,0,0,0.35)]">
+          <p className="mb-2 text-center text-xs font-bold uppercase tracking-[0.35em] text-[var(--color-gold)]">
+            Restricted
+          </p>
+          <h1 className="mb-6 text-center text-3xl font-black uppercase italic tracking-wider text-white">
+            Admin Access
+          </h1>
+
+          <form onSubmit={handleUnlock} className="space-y-4">
+            <div>
+              <label className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
+                Enter code
+              </label>
+              <input
+                type="password"
+                value={accessCode}
+                onChange={(event) => setAccessCode(event.target.value)}
+                placeholder=""
+                className="w-full rounded-xl border border-white/10 bg-[#000F4D] px-3 py-3 text-white outline-none transition focus:border-[var(--color-gold)]"
+                autoFocus
+              />
+            </div>
+
+            {accessError ? (
+              <p className="text-sm font-medium text-red-400">{accessError}</p>
+            ) : null}
+
+            <button
+              type="submit"
+              className="w-full rounded-xl bg-[var(--color-gold)] px-4 py-3 text-sm font-black uppercase tracking-[0.15em] text-[#000F4D] transition hover:bg-[var(--color-gold-hover)]"
+            >
+              Enter Admin
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full bg-[#000B33] min-h-[90vh] py-12">

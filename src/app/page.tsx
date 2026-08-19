@@ -37,7 +37,9 @@ const ACCOUNT_ANIMATION_IMAGES = [
   { src: "/available-accounts/48K ID.jpeg", alt: "Account 48k", sold: false },
 ];
 
-const FEATURED_ACCOUNTS = [
+const STORAGE_KEY = "kmoney-admin-accounts-v1";
+
+const DEFAULT_FEATURED_ACCOUNTS = [
   {
     id: "acc-1",
     title: "Account 18k",
@@ -117,6 +119,59 @@ const FEATURED_ACCOUNTS = [
     sold: false,
   },
 ];
+
+const categoryHighlights: Record<string, string[]> = {
+  Premium: ["Elite squad", "Fast progress", "Verified account"],
+  Legend: ["Top-tier cards", "Strong chemistry", "Ready to play"],
+  Starter: ["Budget-friendly", "Easy start", "Quick delivery"],
+  Value: ["Good value", "Balanced squad", "Fast support"],
+};
+
+const getStoreAccounts = () => {
+  if (typeof window === "undefined") return DEFAULT_FEATURED_ACCOUNTS;
+
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    if (!saved) return DEFAULT_FEATURED_ACCOUNTS;
+
+    const parsed = JSON.parse(saved) as Array<{
+      id: number;
+      title: string;
+      status: "Active" | "Sold";
+      category: string;
+      price: string;
+      imageDataUrl?: string;
+    }>;
+
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      return DEFAULT_FEATURED_ACCOUNTS;
+    }
+
+    return parsed.map((account) => ({
+      id: `acc-${account.id}`,
+      title: account.title,
+      description: `${account.category} account ready for your next match.`,
+      highlights: categoryHighlights[account.category] ?? [
+        "Ready to play",
+        "Fast delivery",
+        "Verified account",
+      ],
+      price: account.price,
+      imageUrl: account.imageDataUrl ?? "",
+      sold: account.status === "Sold",
+    }));
+  } catch {
+    return DEFAULT_FEATURED_ACCOUNTS;
+  }
+};
+
+const syncStoreAccounts = () => {
+  if (typeof window === "undefined") return;
+  const nextAccounts = getStoreAccounts();
+  window.dispatchEvent(
+    new CustomEvent("kmoney-accounts-updated", { detail: nextAccounts }),
+  );
+};
 
 const ADMINS = [
   {
@@ -225,6 +280,26 @@ function HeroImageCarousel() {
 }
 
 export default function Home() {
+  const [featuredAccounts, setFeaturedAccounts] = useState<
+    typeof DEFAULT_FEATURED_ACCOUNTS
+  >(DEFAULT_FEATURED_ACCOUNTS);
+
+  useEffect(() => {
+    const sync = async () => {
+      const nextAccounts = await getStoreAccounts();
+      setFeaturedAccounts(nextAccounts);
+    };
+
+    sync();
+    window.addEventListener("storage", sync);
+    window.addEventListener("kmoney-accounts-updated", sync);
+
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("kmoney-accounts-updated", sync);
+    };
+  }, []);
+
   return (
     <div className="w-full">
       {/* ═══════════ HERO ═══════════ */}
@@ -561,7 +636,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {FEATURED_ACCOUNTS.map((account) => (
+            {featuredAccounts.map((account) => (
               <ProductCard key={account.id} {...account} />
             ))}
           </div>

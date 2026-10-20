@@ -39,9 +39,6 @@ const loadAccounts = async () => {
   return Array.isArray(data) ? data : defaultAdminAccounts;
 };
 
-const ADMIN_ACCESS_CODE = "2023";
-const ADMIN_ACCESS_KEY = "kmoney-admin-access";
-
 const formDefaults = {
   title: "",
   category: "Premium",
@@ -81,10 +78,18 @@ export default function AdminDashboard() {
   const [accessError, setAccessError] = useState("");
 
   useEffect(() => {
-    const saved = window.localStorage.getItem(ADMIN_ACCESS_KEY);
-    if (saved === "true") {
-      setIsUnlocked(true);
-    }
+    const checkSession = async () => {
+      try {
+        const response = await fetch("/api/admin/session");
+        if (response.ok) {
+          setIsUnlocked(true);
+        }
+      } catch {
+        setIsUnlocked(false);
+      }
+    };
+
+    void checkSession();
   }, []);
 
   useEffect(() => {
@@ -231,17 +236,28 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleUnlock = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleUnlock = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (accessCode.trim() === ADMIN_ACCESS_CODE) {
-      window.localStorage.setItem(ADMIN_ACCESS_KEY, "true");
+    try {
+      const response = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ code: accessCode.trim() }),
+      });
+
+      if (!response.ok) {
+        setAccessError("Incorrect code. Access denied.");
+        return;
+      }
+
       setIsUnlocked(true);
       setAccessError("");
-      return;
+    } catch {
+      setAccessError("Unable to verify admin access right now.");
     }
-
-    setAccessError("Incorrect code. Access denied.");
   };
 
   const toggleStatus = async (id: number) => {
